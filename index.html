@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRISHNA Ethics Agent — God Mode</title>
+    <meta name="description"
+        content="KRISHNA AI Ethics Agent — God Mode with 43+ tools, instant execution, and real-time task tracking.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold-primary: #FFD700;
+            --gold-light: #FFF3B0;
+            --gold-dark: #B8860B;
+            --saffron: #FF9933;
+            --deep-bg: #060910;
+            --panel-bg: rgba(12, 15, 28, 0.88);
+            --panel-border: rgba(255, 215, 0, 0.12);
+            --text-primary: #f0e6d3;
+            --text-secondary: #9a8e7d;
+            --text-muted: #5a5247;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --blocked-red: #ff3b3b;
+            --cyan: #22d3ee;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--deep-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 10% 20%, rgba(255, 215, 0, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(255, 153, 51, 0.03) 0%, transparent 50%);
+        }
+
+        .ambient {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ambient::before,
+        .ambient::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .ambient::before {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.06), transparent 70%);
+            top: 10%;
+            left: 5%;
+        }
+
+        .ambient::after {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 153, 51, 0.04), transparent 70%);
+            bottom: 10%;
+            right: 5%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0)
+            }
+
+            50% {
+                transform: translateY(-30px) translateX(-20px)
+            }
+        }
+
+        .app {
+            position: relative;
+            z-index: 1;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.2)
+            }
+
+            50% {
+                box-shadow: 0 0 35px rgba(255, 215, 0, 0.45)
+            }
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-sub {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .god-badge {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24, #f9ca24, #badc58, #22d3ee, #c56cf0);
+            background-size: 300% 300%;
+            animation: godShift 3s ease infinite;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #000;
+            letter-spacing: 1px;
+        }
+
+        @keyframes godShift {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.3
+            }
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--panel-border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .panel:hover {
+            border-color: rgba(255, 215, 0, 0.22);
+        }
+
+        .ph {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pt {
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .pb {
+            padding: 14px 16px;
+        }
+
+        .meta {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        /* Gauge */
+        .gauge-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 16px;
+        }
+
+        .gauge {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .gauge svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .g-track {
+            fill: none;
+            stroke: rgba(255, 215, 0, 0.08);
+            stroke-width: 10;
+        }
+
+        .g-fill {
+            fill: none;
+            stroke: url(#gG);
+            stroke-width: 10;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .g-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .g-score {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .g-label {
+            font-size: 0.55rem;
+            color: var(--text-secondary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            width: 100%;
+            margin-top: 14px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 8px 4px;
+            background: rgba(255, 215, 0, 0.03);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+
+        .sv {
+            font-size: 1.1rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .sv.ok {
+            color: var(--success)
+        }
+
+        .sv.wr {
+            color: var(--warning)
+        }
+
+        .sv.bl {
+            color: var(--blocked-red)
+        }
+
+        .sl {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 3px;
+        }
+
+        /* Command */
+        textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            padding: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            resize: none;
+            transition: all 0.3s;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+        }
+
+        textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 11px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--saffron));
+            border: none;
+            border-radius: 10px;
+            color: #0a0a0a;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* ===== TASK TIMELINE (NEW) ===== */
+        .timeline-wrap {
+            max-height: 260px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 215, 0, 0.2) transparent;
+        }
+
+        .timeline-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .timeline-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.04);
+            animation: slideIn 0.3s ease;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-status-icon {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            margin-top: 1px;
+        }
+
+        .task-status-icon.done {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .task-status-icon.fail {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .task-status-icon.run {
+            background: rgba(34, 211, 238, 0.15);
+            color: var(--cyan);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            animation: spinIcon 1s linear infinite;
+        }
+
+        .task-status-icon.blocked {
+            background: rgba(255, 59, 59, 0.15);
+            color: var(--blocked-red);
+            border: 1px solid rgba(255, 59, 59, 0.3);
+        }
+
+        @keyframes spinIcon {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .task-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-name {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-result {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .task-result.success {
+            color: var(--success);
+        }
+
+        .task-result.error {
+            color: var(--danger);
+        }
+
+        .task-result.blocked {
+            color: var(--blocked-red);
+        }
+
+        .task-tool {
+            font-size: 0.55rem;
+            color: var(--cyan);
+            background: rgba(34, 211, 238, 0.08);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            display: inline-block;
+            margin-top: 3px;
+        }
+
+        .task-time {
+            font-size: 0.55rem;
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        .empty {
+            text-align: center;
+            padding: 24px 16px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .empty-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+            opacity: 0.4;
+        }
+
+        /* Audit */
+        .audit-wrap {
+            max-height: 180px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 215, 0, 0.2) transparent;
+        }
+
+        .audit-wrap::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .audit-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .ae {
+            padding: 8px 10px;
+            border-radius: 7px;
+            margin-bottom: 4px;
+            font-size: 0.7rem;
+            line-height: 1.35;
+            animation: slideIn 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .ae.approved {
+            background: rgba(74, 222, 128, 0.06);
+            border-left-color: var(--success);
+        }
+
+        .ae.warning {
+            background: rgba(251, 191, 36, 0.06);
+            border-left-color: var(--warning);
+        }
+
+        .ae.blocked {
+            background: rgba(239, 68, 68, 0.08);
+            border-left-color: var(--blocked-red);
+        }
+
+        .at {
+            font-weight: 700;
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1px;
+        }
+
+        .at.approved {
+            color: var(--success)
+        }
+
+        .at.warning {
+            color: var(--warning)
+        }
+
+        .at.blocked {
+            color: var(--blocked-red)
+        }
+
+        .ar {
+            color: var(--text-secondary);
+            font-size: 0.65rem;
+        }
+
+        /* Principles */
+        .pi {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.04);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+        }
+
+        .pi:last-child {
+            border-bottom: none;
+        }
+
+        .pn {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
+        /* Terminal */
+        .term {
+            grid-column: 2;
+            grid-row: 1/3;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .term-head {
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-bottom: 1px solid var(--panel-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .d {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .d.r {
+            background: #ff5f57
+        }
+
+        .d.y {
+            background: #febc2e
+        }
+
+        .d.g {
+            background: #28c840
+        }
+
+        .tl {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .clr {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            background: none;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            padding: 3px 9px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        .clr:hover {
+            color: var(--gold-primary);
+            border-color: var(--gold-primary);
+        }
+
+        #logs {
+            flex: 1;
+            padding: 14px 16px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.72rem;
+            line-height: 1.55;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 215, 0, 0.15) transparent;
+        }
+
+        #logs::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #logs::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 10px;
+        }
+
+        .le {
+            margin-bottom: 2px;
+            opacity: 0;
+            animation: lf 0.2s ease forwards;
+        }
+
+        @keyframes lf {
+            from {
+                opacity: 0;
+                transform: translateY(3px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .lt {
+            color: var(--text-muted);
+            margin-right: 6px;
+            font-size: 0.68rem;
+        }
+
+        .lk {
+            color: var(--gold-primary);
+            font-weight: 600;
+        }
+
+        .lr {
+            color: #c084fc;
+        }
+
+        .li {
+            color: #60a5fa;
+        }
+
+        .ln {
+            color: #a78bfa;
+        }
+
+        .la {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .le-th {
+            color: var(--saffron);
+            font-weight: 600;
+        }
+
+        .le-bl {
+            color: var(--blocked-red);
+            font-weight: 700;
+        }
+
+        .le-wr {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .le-ok {
+            color: var(--success);
+        }
+
+        .lc {
+            color: var(--gold-primary);
+            border-top: 1px solid rgba(255, 215, 0, 0.1);
+            padding-top: 8px;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .lerr {
+            color: var(--danger);
+        }
+
+        .lh {
+            color: var(--cyan);
+            font-weight: 600;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 2px solid rgba(10, 10, 10, 0.3);
+            border-top-color: #0a0a0a;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* Tool count badge */
+        .tool-count {
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--cyan);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        /* ========== TOAST NOTIFICATION ========== */
+        .toast {
+            position: fixed; bottom: 20px; right: 20px; z-index: 10001;
+            background: var(--panel-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--panel-border); border-radius: 10px;
+            padding: 12px 18px; min-width: 250px; max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            animation: toastSlide 0.3s ease-out;
+            display: flex; align-items: center; gap: 10px;
+        }
+        @keyframes toastSlide { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+        .toast.success { border-left: 3px solid var(--success); }
+        .toast.error { border-left: 3px solid var(--danger); }
+        .toast.warning { border-left: 3px solid var(--warning); }
+        .toast.info { border-left: 3px solid var(--cyan); }
+        .toast-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .toast-content { flex: 1; }
+        .toast-title { font-size: 0.75rem; font-weight: 700; margin-bottom: 2px; }
+        .toast-msg { font-size: 0.65rem; color: var(--text-secondary); }
+        .toast-close {
+            cursor: pointer; font-size: 1rem; opacity: 0.6;
+            transition: opacity 0.2s; flex-shrink: 0;
+        }
+        .toast-close:hover { opacity: 1; }
+
+        /* ========== ACTION BUTTONS ========== */
+        .action-bar {
+            display: flex; gap: 6px; flex-wrap: wrap;
+        }
+        .action-btn {
+            font-size: 0.65rem; padding: 4px 10px;
+            background: rgba(255,215,0,0.08); color: var(--text-primary);
+            border: 1px solid rgba(255,215,0,0.15); border-radius: 6px;
+            cursor: pointer; transition: all 0.2s;
+            font-family: 'Inter', sans-serif; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        .action-btn:hover { background: rgba(255,215,0,0.15); border-color: var(--gold-primary); transform: translateY(-1px); }
+        .action-btn:active { transform: translateY(0); }
+        .action-btn.danger { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
+        .action-btn.danger:hover { background: rgba(239,68,68,0.15); border-color: var(--danger); }
+
+        /* ========== PERFORMANCE MONITOR ========== */
+        .perf-monitor {
+            position: fixed; top: 10px; left: 10px; z-index: 9999;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.2); border-radius: 6px;
+            padding: 6px 10px; font-family: 'Fira Code', monospace;
+            font-size: 0.65rem; display: none;
+        }
+        .perf-monitor.active { display: block; }
+        .perf-label { color: var(--text-muted); }
+        .perf-value { color: var(--gold-primary); font-weight: 700; margin-left: 5px; }
+        .perf-good { color: var(--success); }
+        .perf-warn { color: var(--warning); }
+        .perf-bad { color: var(--danger); }
+
+        /* ========== CONNECTION STATUS ========== */
+        .conn-status {
+            position: fixed; top: 10px; right: 10px; z-index: 9999;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.2); border-radius: 6px;
+            padding: 6px 12px; font-size: 0.65rem;
+            display: flex; align-items: center; gap: 6px;
+            animation: connFadeIn 0.3s ease;
+        }
+        @keyframes connFadeIn { from{opacity:0} to{opacity:1} }
+        .conn-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .conn-dot.connected { background: var(--success); animation: blink 2s infinite; }
+        .conn-dot.disconnected { background: var(--danger); }
+        .conn-dot.reconnecting { background: var(--warning); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+        @media(max-width:900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .term {
+                grid-column: 1;
+                grid-row: auto;
+                min-height: 350px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .perf-monitor { top: auto; bottom: 10px; left: 10px; }
+            .conn-status { top: auto; bottom: 10px; }
+        }
+
+        /* ===== QUICK ACTION BUTTONS ===== */
+        .qbtn {
+            font-size: 0.62rem; padding: 5px 10px;
+            background: rgba(255,215,0,0.06); color: var(--text-primary);
+            border: 1px solid rgba(255,215,0,0.12); border-radius: 8px;
+            cursor: pointer; transition: all 0.25s cubic-bezier(.25,.8,.25,1);
+            font-family: 'Inter', sans-serif; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 4px;
+            white-space: nowrap;
+        }
+        .qbtn:hover {
+            background: rgba(255,215,0,0.15); border-color: var(--gold-primary);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 15px rgba(255,215,0,0.15);
+        }
+        .qbtn:active { transform: translateY(0) scale(0.95); }
+    </style>
+</head>
+
+<body>
+    <div class="ambient"></div>
+    
+    <!-- PERFORMANCE MONITOR -->
+    <div class="perf-monitor" id="perf-monitor">
+        <div><span class="perf-label">FPS:</span><span class="perf-value" id="fps">0</span></div>
+        <div><span class="perf-label">Particles:</span><span class="perf-value" id="particle-count">0</span></div>
+        <div><span class="perf-label">Tasks:</span><span class="perf-value" id="task-count-perf">0</span></div>
+    </div>
+
+    <!-- CONNECTION STATUS -->
+    <div class="conn-status" id="conn-status">
+        <div class="conn-dot connected" id="conn-dot"></div>
+        <span id="conn-text">Connected</span>
+    </div>
+    
+    <div class="app">
+        <header class="header">
+            <div class="brand">
+                <div class="brand-icon">☸</div>
+                <div>
+                    <div class="brand-title">KRISHNA</div>
+                    <div class="brand-sub">AI Ethics Agent • God Mode • 43 Tools</div>
+                </div>
+                <div class="god-badge">⚡ GOD MODE</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;">
+                <span class="tool-count" id="tool-count">43 Tools</span>
+                <div class="status">
+                    <div class="dot"></div> Ethics Active
+                </div>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <!-- Dharma Gauge -->
+                <div class="panel">
+                    <div class="ph">
+                        <span class="pt">⚖️ Dharma Score</span>
+                        <span class="meta">LIVE</span>
+                    </div>
+                    <div class="gauge-wrap">
+                        <div class="gauge">
+                            <svg viewBox="0 0 180 180">
+                                <defs>
+                                    <linearGradient id="gG" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#4ade80" />
+                                        <stop offset="50%" style="stop-color:#FFD700" />
+                                        <stop offset="100%" style="stop-color:#ff3b3b" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="g-track" cx="90" cy="90" r="80" />
+                                <circle class="g-fill" id="gf" cx="90" cy="90" r="80" />
+                            </svg>
+                            <div class="g-center">
+                                <div class="g-score" id="gs">100</div>
+                                <div class="g-label">Dharma</div>
+                            </div>
+                        </div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="sv ok" id="sa">0</div>
+                                <div class="sl">Approved</div>
+                            </div>
+                            <div class="stat">
+                                <div class="sv wr" id="sw">0</div>
+                                <div class="sl">Warnings</div>
+                            </div>
+                            <div class="stat">
+                                <div class="sv bl" id="sb">0</div>
+                                <div class="sl">Blocked</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Command Input -->
+                <div class="panel">
+                    <div class="ph">
+                        <span class="pt">⚡ Command Input</span>
+                        <div class="action-bar">
+                            <button class="action-btn" id="pause-btn" title="Pause/Resume Kernel">⏸️</button>
+                            <button class="action-btn" id="turbo-btn" title="Toggle Turbo Mode">🚀</button>
+                            <button class="action-btn" id="perf-btn" title="Toggle Performance Monitor">📊</button>
+                        </div>
+                    </div>
+                    <div class="pb">
+                        <form id="gf-form">
+                            <label class="meta" style="display:block;margin-bottom:6px;font-weight:600;">NEW
+                                OBJECTIVE</label>
+                            <textarea id="gi" rows="3"
+                                placeholder="E.g., open notepad and write about krishna, then calc 42*13, then take screenshot..."></textarea>
+                            <button type="submit" class="btn" id="btn">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                                <span>Execute with Ethics</span>
+                            </button>
+                        </form>
+                        <!-- ON-SCREEN QUICK CONTROLS -->
+                        <div class="quick-controls" style="margin-top:10px;">
+                            <div class="meta" style="margin-bottom:6px;font-weight:600;">QUICK ACTIONS</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:5px;">
+                                <button class="qbtn" onclick="quickCmd('take a selfie')">📸 Selfie</button>
+                                <button class="qbtn" onclick="quickCmd('take a screenshot')">🖼️ Screenshot</button>
+                                <button class="qbtn" onclick="quickCmd('open camera')">📷 Camera</button>
+                                <button class="qbtn" onclick="quickCmd('open notepad')">📝 Notepad</button>
+                                <button class="qbtn" onclick="quickCmd('open chrome')">🌐 Chrome</button>
+                                <button class="qbtn" onclick="quickCmd('open file explorer')">📂 Files</button>
+                                <button class="qbtn" onclick="quickCmd('battery status')">🔋 Battery</button>
+                                <button class="qbtn" onclick="quickCmd('wifi status')">📶 WiFi</button>
+                                <button class="qbtn" onclick="quickCmd('ip address')">🌍 IP</button>
+                                <button class="qbtn" onclick="quickCmd('disk space')">💾 Disk</button>
+                                <button class="qbtn" onclick="quickCmd('system info')">🖥️ System</button>
+                                <button class="qbtn" onclick="quickCmd('time')">🕐 Time</button>
+                                <button class="qbtn" onclick="quickCmd('list files')">📋 List Files</button>
+                                <button class="qbtn" onclick="quickCmd('open calculator')">🔢 Calc</button>
+                                <button class="qbtn" onclick="quickCmd('open settings')">⚙️ Settings</button>
+                                <button class="qbtn" onclick="quickCmd('lock screen')">🔒 Lock</button>
+                                <button class="qbtn" onclick="if(window.VoiceEngine) VoiceEngine.toggle()" style="background:rgba(74,222,128,0.10);border-color:rgba(74,222,128,0.25)">🎤 Voice</button>
+                                <button class="qbtn" onclick="if(window.VoiceEngine) VoiceEngine.toggleJarvis()" style="background:rgba(34,211,238,0.10);border-color:rgba(34,211,238,0.25)">🤖 Jarvis</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✅ TASK EXECUTION TIMELINE (NEW!) -->
+                <div class="panel" style="flex:1;">
+                    <div class="ph">
+                        <span class="pt">📋 Task Execution</span>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="meta" id="tc">0 tasks</span>
+                            <button class="action-btn danger" id="clear-tasks-btn" title="Clear Task History">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="timeline-wrap" id="tl-container">
+                        <div class="empty">
+                            <div class="empty-icon">⚡</div>
+                            <div>No tasks yet.<br>Submit a goal to watch them execute.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ethics Audit -->
+                <div class="panel">
+                    <div class="ph">
+                        <span class="pt">📜 Ethics Audit Trail</span>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span class="meta" id="ac">0 entries</span>
+                            <button class="action-btn danger" id="clear-ethics-btn" title="Clear Audit Trail">🗑️</button>
+                        </div>
+                    </div>
+                    <div class="audit-wrap" id="audit"></div>
+                </div>
+
+                <!-- Principles -->
+                <div class="panel">
+                    <div class="ph"><span class="pt">🙏 Dharma Principles</span></div>
+                    <div class="pb" style="padding:10px 16px;">
+                        <div class="pi">🕊️ <div><span class="pn">Ahimsa</span> — Non-violence.</div>
+                        </div>
+                        <div class="pi">🔮 <div><span class="pn">Satya</span> — Truthfulness.</div>
+                        </div>
+                        <div class="pi">🛡️ <div><span class="pn">Asteya</span> — Non-stealing.</div>
+                        </div>
+                        <div class="pi">🌿 <div><span class="pn">Aparigraha</span> — Non-possession.</div>
+                        </div>
+                        <div class="pi">💛 <div><span class="pn">Karuna</span> — Compassion.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terminal -->
+            <div class="panel term" id="term-panel">
+                <div class="term-head">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div class="dots">
+                            <div class="d r" id="dot-red" title="Minimize Terminal"></div>
+                            <div class="d y" id="dot-yellow" title="Toggle Auto-scroll"></div>
+                            <div class="d g" id="dot-green" title="Maximize Terminal"></div>
+                        </div>
+                        <span class="tl">
+                            <svg style="width:13px;height:13px" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            Kernel Monitor
+                        </span>
+                    </div>
+                    <div style="display:flex;gap:8px;">
+                        <button id="export-logs" class="clr" title="Export Logs">💾 Export</button>
+                        <button id="clr" class="clr" title="Clear Logs">🗑️ Clear</button>
+                    </div>
+                </div>
+                <div id="logs">
+                    <div style="color:var(--text-muted);font-style:italic;font-size:0.72rem">// ☸ KRISHNA God Mode — 43
+                        tools loaded</div>
+                    <div style="color:var(--text-muted);font-style:italic;font-size:0.72rem;margin-top:3px">// Dharma
+                        Guardian active. Awaiting objectives.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const C = 2 * Math.PI * 80;
+        const gf = document.getElementById('gf');
+        gf.style.strokeDasharray = C;
+
+        function upGauge(s) {
+            gf.style.strokeDashoffset = C - (s / 100) * C;
+            document.getElementById('gs').textContent = s;
+        }
+        upGauge(100);
+
+        // ====== QUICK COMMAND FUNCTION (for on-screen buttons) ======
+        async function quickCmd(goal) {
+            try {
+                const r = await fetch('/api/goal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ goal }) });
+                if (r.ok && window.showToast) showToast('⚡ ' + goal, 'info', 2000);
+            } catch (e) { if (window.showToast) showToast('Failed: ' + e.message, 'error'); }
+        }
+        window.quickCmd = quickCmd;
+
+        // ====== TASK POLLING — polls /api/tasks every 500ms for accurate status ======
+        window.lastTaskCount = 0;
+        window._lastTaskHash = '';
+
+        function renderTasksFromAPI(tasks) {
+            const c = document.getElementById('tl-container');
+            document.getElementById('tc').textContent = tasks.length + ' tasks';
+            if (tasks.length === 0) {
+                c.innerHTML = '<div class="empty"><div class="empty-icon">⚡</div><div>No tasks yet.<br>Submit a goal to watch them execute.</div></div>';
+                return;
+            }
+            c.innerHTML = '';
+            [...tasks].reverse().forEach(t => {
+                const st = t.status; // "done", "error", "blocked", "running"
+                const icon = st === 'done' ? '✅' : st === 'error' ? '❌' : st === 'blocked' ? '🚫' : '⏳';
+                const cls = st === 'done' ? 'done' : st === 'error' ? 'fail' : st === 'blocked' ? 'blocked' : 'run';
+                const rcls = st === 'done' ? 'success' : st === 'error' ? 'error' : st === 'blocked' ? 'blocked' : '';
+                const div = document.createElement('div');
+                div.className = 'task-item';
+                div.innerHTML = `
+                    <div class="task-status-icon ${cls}">${icon}</div>
+                    <div class="task-info">
+                        <div class="task-name">${esc(t.name)}</div>
+                        ${t.tool ? `<div class="task-tool">${esc(t.tool)}</div>` : ''}
+                        ${t.result ? `<div class="task-result ${rcls}">${esc(t.result)}</div>` : ''}
+                    </div>
+                    <div class="task-time">${t.time || ''}</div>
+                `;
+                c.appendChild(div);
+            });
+            c.scrollTop = 0;
+        }
+
+        // Poll /api/tasks — stored ID for turbo/pause control
+        window.taskPollInterval = setInterval(async () => {
+            if ((window.PERF || {}).PAUSED) return;
+            try {
+                const r = await fetch('/api/tasks');
+                if (r.ok) {
+                    const d = await r.json();
+                    const tasks = d.tasks || [];
+                    const hash = tasks.map(t => t.id + ':' + t.status).join(',');
+                    if (hash !== window._lastTaskHash || tasks.some(t => t.status === 'running')) {
+                        window._lastTaskHash = hash;
+                        window.lastTaskCount = tasks.length;
+                        renderTasksFromAPI(tasks);
+                    }
+                }
+            } catch (e) { }
+        }, 500);
+
+        function timeStr() {
+            const n = new Date();
+            return n.getHours().toString().padStart(2, '0') + ':' + n.getMinutes().toString().padStart(2, '0') + ':' + n.getSeconds().toString().padStart(2, '0');
+        }
+        function esc(s) { return s ? s.replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''; }
+
+        function fmtLog(t) {
+            let c = '';
+            if (t.includes('BLOCKED') || t.includes('🚫')) c = 'le-bl';
+            else if (t.includes('[Ethics]') && t.includes('⚠️')) c = 'le-wr';
+            else if (t.includes('[Ethics]') && t.includes('✅')) c = 'le-ok';
+            else if (t.includes('[Ethics]')) c = 'le-th';
+            else if (t.includes('[Handler]') && t.includes('⚡')) c = 'lh';
+            else if (t.includes('[Kernel]') && t.includes('✅')) c = 'la';
+            else if (t.includes('[Kernel]')) c = 'lk';
+            else if (t.includes('[Reasoning]')) c = 'lr';
+            else if (t.includes('[Intelligence]')) c = 'li';
+            else if (t.includes('[Navigator]')) c = 'ln';
+            else if (t.includes('[Actuator]')) c = 'la';
+            else if (t.includes('Error') || t.includes('Failed')) c = 'lerr';
+            else if (t.includes('===')) c = 'lc';
+            return `<span class="${c}">${esc(t)}</span>`;
+        }
+
+        // SSE — robust connection with auto-reconnect
+        function connectSSE() {
+            const src = new EventSource("/api/logs");
+            
+            src.onopen = () => {
+                if (window.ConnectionManager) ConnectionManager.updateStatus('connected');
+            };
+            
+            src.onmessage = e => {
+                try {
+                    const d = JSON.parse(e.data);
+                    const t = d.text;
+                    // Skip heartbeat messages
+                    if (t === '[heartbeat]') return;
+                    parseLog(t);
+                    const logsEl = document.getElementById('logs');
+                    const maxLines = (window.PERF || {}).MAX_LOG_LINES || 500;
+                    while (logsEl.children.length >= maxLines) logsEl.removeChild(logsEl.firstChild);
+                    const div = document.createElement('div');
+                    div.className = 'le';
+                    div.innerHTML = `<span class="lt">[${timeStr()}]</span> ${fmtLog(t)}`;
+                    logsEl.appendChild(div);
+                    if ((window.PERF || {}).AUTO_SCROLL !== false) logsEl.scrollTop = logsEl.scrollHeight;
+                } catch(err) {}
+            };
+            
+            src.onerror = () => {
+                if (window.ConnectionManager) ConnectionManager.updateStatus('disconnected');
+                src.close();
+                // Reconnect after 3 seconds
+                setTimeout(() => {
+                    if (window.ConnectionManager) ConnectionManager.updateStatus('reconnecting');
+                    connectSSE();
+                }, 3000);
+            };
+            
+            window._sseSource = src;
+        }
+        connectSSE();
+
+        // Ethics polling — stored ID for turbo/pause control
+        window.ethicsPollInterval = setInterval(async () => {
+            if ((window.PERF || {}).PAUSED) return;
+            try {
+                const r = await fetch('/api/ethics');
+                if (r.ok) {
+                    const d = await r.json();
+                    upGauge(d.dharma_score || 100);
+                    document.getElementById('sa').textContent = d.total_approved || 0;
+                    document.getElementById('sw').textContent = d.total_warnings || 0;
+                    document.getElementById('sb').textContent = d.total_blocked || 0;
+                    const tr = d.audit_trail || [];
+                    if (tr.length > 0) {
+                        document.getElementById('ac').textContent = tr.length + ' entries';
+                        const c = document.getElementById('audit');
+                        c.innerHTML = '';
+                        tr.slice(-12).reverse().forEach(e => {
+                            const tp = (e.type || 'APPROVED').toLowerCase();
+                            const div = document.createElement('div');
+                            div.className = 'ae ' + tp;
+                            div.innerHTML = `<div class="at ${tp}">${e.type || '?'}</div><div class="ar">${e.reason || e.subject || ''}</div>`;
+                            c.appendChild(div);
+                        });
+                    }
+                }
+            } catch (e) { }
+        }, 2500);
+
+        // Form
+        document.getElementById('gf-form').addEventListener('submit', async e => {
+            e.preventDefault();
+            const g = document.getElementById('gi').value.trim();
+            if (!g) return;
+            const b = document.getElementById('btn');
+            const oh = b.innerHTML;
+            try {
+                b.innerHTML = '<span class="spinner"></span> <span>Executing...</span>';
+                b.disabled = true;
+                const r = await fetch('/api/goal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ goal: g }) });
+                if (r.ok) document.getElementById('gi').value = '';
+            } catch (e) { console.error(e); }
+            finally { b.innerHTML = oh; b.disabled = false; }
+        });
+
+    </script>
+    
+    <!-- PERFORMANCE UPGRADE & BUTTON HANDLERS -->
+    <script src="performance_upgrade.js"></script>
+    <script src="button_handlers.js"></script>
+    <script src="animations.js"></script>
+    <script src="voice_engine.js"></script>
+    <script>
+        // ====== POLLING ENGINE — restartable by turbo/pause ======
+        // Called by button_handlers.js on turbo/pause toggle to restart with new PERF values
+        window.startPolling = function() {
+            if (window.taskPollInterval) clearInterval(window.taskPollInterval);
+            if (window.ethicsPollInterval) clearInterval(window.ethicsPollInterval);
+
+            window.taskPollInterval = setInterval(async () => {
+                if (PERF.PAUSED) return;
+                try {
+                    const r = await fetch('/api/tasks');
+                    if (r.ok) {
+                        const d = await r.json();
+                        const tasks = d.tasks || [];
+                        const hash = tasks.map(t => t.id + ':' + t.status).join(',');
+                        if (hash !== window._lastTaskHash || tasks.some(t => t.status === 'running')) {
+                            window._lastTaskHash = hash;
+                            window.lastTaskCount = tasks.length;
+                            renderTasksFromAPI(tasks);
+                        }
+                    }
+                } catch (e) {}
+            }, PERF.THROTTLE_TASK_POLL);
+
+            window.ethicsPollInterval = setInterval(async () => {
+                if (PERF.PAUSED) return;
+                try {
+                    const r = await fetch('/api/ethics');
+                    if (r.ok) {
+                        const d = await r.json();
+                        upGauge(d.dharma_score || 100);
+                        document.getElementById('sa').textContent = d.total_approved || 0;
+                        document.getElementById('sw').textContent = d.total_warnings || 0;
+                        document.getElementById('sb').textContent = d.total_blocked || 0;
+                        const tr = d.audit_trail || [];
+                        if (tr.length > 0) {
+                            document.getElementById('ac').textContent = tr.length + ' entries';
+                            const c = document.getElementById('audit');
+                            c.innerHTML = '';
+                            tr.slice(-12).reverse().forEach(e => {
+                                const tp = (e.type || 'APPROVED').toLowerCase();
+                                const div = document.createElement('div');
+                                div.className = 'ae ' + tp;
+                                div.innerHTML = `<div class="at ${tp}">${e.type || '?'}</div><div class="ar">${e.reason || e.subject || ''}</div>`;
+                                c.appendChild(div);
+                            });
+                        }
+                    }
+                } catch (e) {}
+            }, PERF.THROTTLE_ETHICS_POLL);
+        };
+
+        // Initialize all button handlers
+        ButtonHandlers.init();
+        
+        // Start connection monitoring
+        setInterval(() => ConnectionManager.testConnection(), 10000);
+        
+        // Performance monitor updates
+        if (PERF.USE_RAF) {
+            function perfLoop() {
+                PerfMonitor.update();
+                requestAnimationFrame(perfLoop);
+            }
+            requestAnimationFrame(perfLoop);
+        }
+        
+        // Welcome message
+        setTimeout(() => {
+            showToast('🎉 KRISHNA God Mode - All systems operational!', 'success', 4000);
+        }, 1500);
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl + M = Toggle performance monitor
+            if (e.ctrlKey && e.key === 'm') {
+                e.preventDefault();
+                PerfMonitor.toggle();
+            }
+            // Ctrl + P = Pause/Resume
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                const pauseBtn = document.getElementById('pause-btn');
+                if (pauseBtn) pauseBtn.click();
+            }
+            // Ctrl + T = Turbo mode
+            if (e.ctrlKey && e.key === 't') {
+                e.preventDefault();
+                const turboBtn = document.getElementById('turbo-btn');
+                if (turboBtn) turboBtn.click();
+            }
+        });
+        
+        console.log('%c🎯 KRISHNA GOD MODE v2.0', 'color: #FFD700; font-size: 20px; font-weight: bold');
+        console.log('%c⚡ Performance Optimizations Active', 'color: #22d3ee; font-size: 14px');
+        console.log('%c🔥 All Buttons Functional', 'color: #ff6b6b; font-size: 14px');
+        console.log('%cKeyboard Shortcuts:', 'color: #c084fc; font-weight: bold');
+        console.log('  Ctrl+M = Toggle Performance Monitor');
+        console.log('  Ctrl+P = Pause/Resume Kernel');
+        console.log('  Ctrl+T = Toggle Turbo Mode');
+    </script>
+</body>
+
+</html>

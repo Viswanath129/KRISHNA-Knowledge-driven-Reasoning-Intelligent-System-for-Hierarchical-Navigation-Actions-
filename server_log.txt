@@ -1,0 +1,37 @@
+B:\projects\CLAW BOT\.venv\lib\site-packages\google\auth\__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+B:\projects\CLAW BOT\.venv\lib\site-packages\google\oauth2\__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+INFO:     Started server process [21924]
+INFO:     Waiting for application startup.
+[Intelligence] Tool 'schedule_meeting' registered.
+[Intelligence] Tool 'send_email' registered.
+[Intelligence] Tool 'get_time' registered.
+[Intelligence] Tool 'execute_command' registered.
+[Intelligence] Tool 'read_file' registered.
+[Intelligence] Tool 'write_file' registered.
+[Intelligence] Tool 'press_hotkeys' registered.
+Agent initialized. System ready.
+[Kernel] Starting Asynchronous Agent Loop Manager...
+[Kernel] Goal achieved or no tasks left. System is idle and waiting for events.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+[API] Goal added to processing queue: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+INFO:     127.0.0.1:63676 - "POST /api/goal HTTP/1.1" 200 OK
+[Kernel] Received asynchronous event: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Navigator] New multi-step plan required for goal: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Intelligence] Querying gemini-2.5-flash for decision logic...
+[Intelligence] LLM API Error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 30.749221287s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}
+[Navigator] Error generating plan: the JSON object must be str, bytes or bytearray, not NoneType. Falling back to single step.
+
+=== Active Agent Cycle ===
+[Kernel] Event Dispatcher observed: {'observation': 'Open notepad for me and use windows speech (by pressing win and h keys) then type what I said', 'result': None}
+[Kernel] Focus task: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Handler] Consulting reasoning for step: 'Open notepad for me and use windows speech (by pressing win and h keys) then type what I said'
+[Reasoning] Analyzing context for trigger: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Intelligence] Querying gemini-2.5-flash for decision logic...
+[Intelligence] LLM API Error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\nPlease retry in 29.727027123s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '29s'}]}}
+[Handler] Choosing action based on decision
+[Actuator] Physical/Digital Execution Layer Triggered.
+[Actuator] No specific tool requested by Reasoning. Relying on default decision string.
+[Kernel] Goal achieved or no tasks left. System is idle and waiting for events.

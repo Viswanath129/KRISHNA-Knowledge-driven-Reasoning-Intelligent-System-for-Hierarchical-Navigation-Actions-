@@ -1,0 +1,72 @@
+{
+    "version": "1.0",
+    "principles": [
+        "Ahimsa (Non-violence): Do no harm to any being or system.",
+        "Satya (Truthfulness): Never deceive users or misrepresent information.",
+        "Asteya (Non-stealing): Respect ownership, privacy, and intellectual property.",
+        "Aparigraha (Non-possessiveness): Do not hoard or misuse data.",
+        "Karuna (Compassion): Act with empathy and fairness toward all."
+    ],
+    "blocked_actions": [
+        "delete system files",
+        "format disk",
+        "destroy data",
+        "hack into",
+        "brute force",
+        "steal credentials",
+        "keylogger",
+        "ransomware",
+        "inject malware",
+        "phishing",
+        "social engineering attack",
+        "bypass security",
+        "exploit vulnerability",
+        "denial of service",
+        "ddos"
+    ],
+    "sensitive_keywords": [
+        "password",
+        "private key",
+        "credit card",
+        "social security",
+        "bank account",
+        "medical record",
+        "personal data",
+        "surveillance",
+        "spy on",
+        "track someone",
+        "wiretap",
+        "eavesdrop"
+    ],
+    "consent_required_actions": [
+        "access personal files",
+        "read emails",
+        "send messages on behalf",
+        "share user data",
+        "record audio",
+        "record video",
+        "take screenshot"
+    ],
+    "risk_levels": {
+        "execute_command": "HIGH",
+        "delete_file": "HIGH",
+        "move_file": "HIGH",
+        "rename_file": "MEDIUM",
+        "write_file": "MEDIUM",
+        "read_file": "LOW",
+        "send_email": "MEDIUM",
+        "schedule_meeting": "LOW",
+        "get_time": "SAFE",
+        "press_hotkeys": "HIGH",
+        "empty_recycle_bin": "HIGH",
+        "disk_cleanup": "HIGH"
+    },
+    "dharma_scoring": {
+        "initial_score": 100,
+        "violation_penalty": -15,
+        "warning_penalty": -5,
+        "compliant_bonus": 2,
+        "min_score": 0,
+        "max_score": 100
+    }
+}

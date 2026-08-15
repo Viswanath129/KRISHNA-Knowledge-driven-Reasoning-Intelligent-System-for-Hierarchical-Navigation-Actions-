@@ -1,0 +1,24 @@
+B:\projects\CLAW BOT\.venv\lib\site-packages\google\auth\__init__.py:54: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+B:\projects\CLAW BOT\.venv\lib\site-packages\google\oauth2\__init__.py:40: FutureWarning: You are using a Python version 3.9 past its end of life. Google will update google-auth with critical bug fixes on a best-effort basis, but not with any other fixes or features. Please upgrade your Python version, and then update google-auth.
+  warnings.warn(eol_message.format("3.9"), FutureWarning)
+INFO:     Started server process [21048]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+[Intelligence] Tool 'schedule_meeting' registered.
+[Intelligence] Tool 'send_email' registered.
+[Intelligence] Tool 'get_time' registered.
+[Intelligence] Tool 'execute_command' registered.
+[Intelligence] Tool 'read_file' registered.
+[Intelligence] Tool 'write_file' registered.
+[Intelligence] Tool 'press_hotkeys' registered.
+Agent initialized. System ready.
+[Kernel] Starting Asynchronous Agent Loop Manager...
+[Kernel] Goal achieved or no tasks left. System is idle and waiting for events.
+INFO:     127.0.0.1:64328 - "GET /api/logs HTTP/1.1" 200 OK
+[Kernel] Received asynchronous event: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Navigator] New multi-step plan required for goal: Open notepad for me and use windows speech (by pressing win and h keys) then type what I said
+[Intelligence] Querying gemini-2.5-flash for decision logic...
+[Navigator] Generated Sequence: ['execute_command("notepad.exe")', 'press_hotkeys(["win", "h"])']
+INFO:     127.0.0.1:64334 - "POST /api/goal HTTP/1.1" 200 OK
