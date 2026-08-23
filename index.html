@@ -1206,6 +1206,26 @@
         window._lastTaskHash = '';
 
         function renderTasksFromAPI(tasks) {
+            if (tasks.length > 0) {
+                localStorage.setItem('krishna_tasks', JSON.stringify(tasks));
+            } else if (tasks.length === 0 && !window._tasksInitialRendered) {
+                // If it's the very first render and API gave 0 tasks, try to load from localStorage
+                try {
+                    const saved = localStorage.getItem('krishna_tasks');
+                    if (saved) {
+                        const parsed = JSON.parse(saved);
+                        if (parsed && parsed.length > 0) {
+                            tasks = parsed;
+                            window._lastTaskHash = tasks.map(t => t.id + ':' + t.status).join(',');
+                            window.lastTaskCount = tasks.length;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to load tasks from localStorage', e);
+                }
+            }
+            window._tasksInitialRendered = true;
+
             const c = document.getElementById('tl-container');
             document.getElementById('tc').textContent = tasks.length + ' tasks';
             if (tasks.length === 0) {
