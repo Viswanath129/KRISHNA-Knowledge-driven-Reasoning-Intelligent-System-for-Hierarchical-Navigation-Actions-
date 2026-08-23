@@ -590,11 +590,8 @@ def tool_calculate(**kwargs):
     if not expression: return "Error: Missing 'expression'."
     try:
         # Basic safe eval
-        allowed_chars = "0123456789+-*/(). "
-        if all(c in allowed_chars for c in expression):
-            result = eval(expression)
-            return f"Result: {result}"
-        return "Error: Invalid characters in expression."
+        result = eval(expression, {"__builtins__": None, "math": math})
+        return f"Result: {result}"
     except Exception as e: return f"Error: {e}"
 
 

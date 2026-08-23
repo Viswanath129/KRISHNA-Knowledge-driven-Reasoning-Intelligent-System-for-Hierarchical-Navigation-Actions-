@@ -70,6 +70,7 @@ const ButtonHandlers = {
     
     clearTasks() {
         window.lastTaskHash = '';
+        localStorage.removeItem('krishna_tasks');
         const container = document.getElementById('tl-container');
         if (container) {
             container.innerHTML = '<div class="empty"><div class="empty-icon">⚡</div><div>Task history cleared.<br>Submit a new goal.</div></div>';
