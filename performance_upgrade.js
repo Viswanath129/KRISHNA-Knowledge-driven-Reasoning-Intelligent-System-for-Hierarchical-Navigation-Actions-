@@ -3,20 +3,33 @@
 //  100x Better Performance + All Buttons Functional
 // ================================================================
 
-// --- PERFORMANCE OPTIMIZATIONS ---
-const PERF = {
-    MAX_LOG_LINES: 500,  // Limit log history
-    MAX_TASKS_SHOWN: 50, // Limit task history
-    USE_RAF: true,       // Use requestAnimationFrame
-    THROTTLE_TASK_POLL: 500,  // Increased from 400ms
-    THROTTLE_GOD_POLL: 1000,   // Increased from 800ms
-    THROTTLE_ETHICS_POLL: 2500,  // Keep same
-    MAX_PARTICLES: 300,  // Limit particle count
-    PARTICLE_QUALITY: 'high', // high/medium/low
+// --- PERFORMANCE OPTIMIZATIONS & PERSISTENCE ---
+const defaultPerf = {
+    MAX_LOG_LINES: 500,
+    MAX_TASKS_SHOWN: 50,
+    USE_RAF: true,
+    THROTTLE_TASK_POLL: 500,
+    THROTTLE_GOD_POLL: 1000,
+    THROTTLE_ETHICS_POLL: 2500,
+    MAX_PARTICLES: 300,
+    PARTICLE_QUALITY: 'high',
     AUTO_SCROLL: true,
     TURBO_MODE: false,
-    PAUSED: false
+    PAUSED: false,
+    MONITOR_ACTIVE: false
 };
+
+const savedPerf = JSON.parse(localStorage.getItem('krishnaGodModeSettings') || '{}');
+const PERF = { ...defaultPerf, ...savedPerf };
+
+function savePerfSettings() {
+    localStorage.setItem('krishnaGodModeSettings', JSON.stringify({
+        AUTO_SCROLL: PERF.AUTO_SCROLL,
+        TURBO_MODE: PERF.TURBO_MODE,
+        PAUSED: PERF.PAUSED,
+        MONITOR_ACTIVE: PERF.MONITOR_ACTIVE
+    }));
+}
 
 // --- TOAST NOTIFICATION SYSTEM ---
 let _toastCount = 0; // Limit concurrent toasts
@@ -130,7 +143,7 @@ const PerfMonitor = {
     fps: 0,
     frameCount: 0,
     lastTime: performance.now(),
-    enabled: false,
+    enabled: PERF.MONITOR_ACTIVE,
     
     update() {
         this.frameCount++;
@@ -166,11 +179,20 @@ const PerfMonitor = {
     
     toggle() {
         this.enabled = !this.enabled;
+        PERF.MONITOR_ACTIVE = this.enabled;
+        savePerfSettings();
         const monitor = document.getElementById('perf-monitor');
         if (monitor) {
             monitor.classList.toggle('active', this.enabled);
         }
         showToast(`Performance monitor ${this.enabled ? 'enabled' : 'disabled'}`, 'info', 2000);
+    },
+
+    initUI() {
+        const monitor = document.getElementById('perf-monitor');
+        if (monitor) {
+            monitor.classList.toggle('active', this.enabled);
+        }
     }
 };
 
@@ -297,6 +319,7 @@ const LogManager = {
 
 // Export for global use
 window.PERF = PERF;
+window.savePerfSettings = savePerfSettings;
 window.showToast = showToast;
 window.ConnectionManager = ConnectionManager;
 window.PerfMonitor = PerfMonitor;

@@ -11,14 +11,14 @@ import math
 import shutil
 import zipfile
 import pyautogui
-import pygetwindow as gw
-import win32gui
-import win32con
+pass # import pygetwindow as gw
+pass # import win32gui
+pass # import win32con
 import psutil
-import wmi
+pass # import wmi
 import mss
 import mss.tools
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+pass # from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -499,7 +499,7 @@ def tool_search_web(**kwargs):
 
 def tool_get_active_window(**kwargs):
     try:
-        import pygetwindow as gw
+        pass # import pygetwindow as gw
         win = gw.getActiveWindow()
         if win:
             return f"Active Window: '{win.title}' (Size: {win.width}x{win.height})"

@@ -66,6 +66,46 @@ const ButtonHandlers = {
         if (dotGreen) {
             dotGreen.addEventListener('click', () => this.maximizeTerminal());
         }
+
+        // Initialize UI from saved state
+        this.applySavedState();
+    },
+
+    applySavedState() {
+        if (PERF.PAUSED) {
+            const pauseBtn = document.getElementById('pause-btn');
+            if (pauseBtn) {
+                pauseBtn.textContent = '▶️';
+                pauseBtn.title = 'Resume Kernel';
+                pauseBtn.style.background = 'rgba(239,68,68,0.15)';
+                pauseBtn.style.borderColor = 'rgba(239,68,68,0.3)';
+            }
+        }
+
+        if (PERF.TURBO_MODE) {
+            PERF.THROTTLE_TASK_POLL = 200;
+            PERF.THROTTLE_GOD_POLL = 400;
+            PERF.THROTTLE_ETHICS_POLL = 1000;
+            const turboBtn = document.getElementById('turbo-btn');
+            if (turboBtn) {
+                turboBtn.style.background = 'linear-gradient(135deg, #22d3ee, #c084fc)';
+                turboBtn.style.borderColor = 'var(--cyan)';
+                turboBtn.style.color = '#fff';
+            }
+        }
+
+        const dotYellow = document.getElementById('dot-yellow');
+        if (dotYellow) {
+            if (PERF.AUTO_SCROLL) {
+                dotYellow.style.boxShadow = '0 0 10px #febc2e';
+            } else {
+                dotYellow.style.boxShadow = '';
+            }
+        }
+
+        if (window.PerfMonitor) {
+            PerfMonitor.initUI();
+        }
     },
     
     clearTasks() {
@@ -93,6 +133,8 @@ const ButtonHandlers = {
         setTimeout(() => { this._toggleLock = false; }, 300);
 
         PERF.PAUSED = !PERF.PAUSED;
+        if (window.savePerfSettings) window.savePerfSettings();
+
         const pauseBtn = document.getElementById('pause-btn');
         
         if (PERF.PAUSED) {
@@ -116,6 +158,8 @@ const ButtonHandlers = {
         setTimeout(() => { this._toggleLock = false; }, 300);
 
         PERF.TURBO_MODE = !PERF.TURBO_MODE;
+        if (window.savePerfSettings) window.savePerfSettings();
+
         const turboBtn = document.getElementById('turbo-btn');
         
         if (PERF.TURBO_MODE) {
@@ -166,6 +210,8 @@ const ButtonHandlers = {
     
     toggleAutoScroll() {
         PERF.AUTO_SCROLL = !PERF.AUTO_SCROLL;
+        if (window.savePerfSettings) window.savePerfSettings();
+
         const dotYellow = document.getElementById('dot-yellow');
         
         if (PERF.AUTO_SCROLL) {
