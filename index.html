@@ -1290,15 +1290,20 @@
                     const t = d.text;
                     // Skip heartbeat messages
                     if (t === '[heartbeat]') return;
-                    parseLog(t);
-                    const logsEl = document.getElementById('logs');
-                    const maxLines = (window.PERF || {}).MAX_LOG_LINES || 500;
-                    while (logsEl.children.length >= maxLines) logsEl.removeChild(logsEl.firstChild);
-                    const div = document.createElement('div');
-                    div.className = 'le';
-                    div.innerHTML = `<span class="lt">[${timeStr()}]</span> ${fmtLog(t)}`;
-                    logsEl.appendChild(div);
-                    if ((window.PERF || {}).AUTO_SCROLL !== false) logsEl.scrollTop = logsEl.scrollHeight;
+
+                    if (window.LogManager) {
+                        LogManager.addLog(t);
+                    } else {
+                        // Fallback in case performance_upgrade.js failed to load
+                        const logsEl = document.getElementById('logs');
+                        const maxLines = (window.PERF || {}).MAX_LOG_LINES || 500;
+                        while (logsEl.children.length >= maxLines) logsEl.removeChild(logsEl.firstChild);
+                        const div = document.createElement('div');
+                        div.className = 'le';
+                        div.innerHTML = `<span class="lt">[${timeStr()}]</span> ${fmtLog(t)}`;
+                        logsEl.appendChild(div);
+                        if ((window.PERF || {}).AUTO_SCROLL !== false) logsEl.scrollTop = logsEl.scrollHeight;
+                    }
                 } catch(err) {}
             };
             
