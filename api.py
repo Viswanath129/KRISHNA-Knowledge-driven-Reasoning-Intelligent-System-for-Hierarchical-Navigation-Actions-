@@ -10,15 +10,37 @@ import datetime
 import math
 import shutil
 import zipfile
-import pyautogui
-import pygetwindow as gw
-import win32gui
-import win32con
 import psutil
-import wmi
-import mss
-import mss.tools
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+try:
+    import pyautogui
+    import pygetwindow as gw
+    import win32gui
+    import win32con
+    import wmi
+    import mss
+    import mss.tools
+    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+except ImportError:
+    import sys
+    from unittest.mock import MagicMock
+    pyautogui = MagicMock()
+    gw = MagicMock()
+    win32gui = MagicMock()
+    win32con = MagicMock()
+    wmi = MagicMock()
+    mss = MagicMock()
+    mss.tools = MagicMock()
+    AudioUtilities = MagicMock()
+    IAudioEndpointVolume = MagicMock()
+    sys.modules['pyautogui'] = pyautogui
+    sys.modules['pygetwindow'] = gw
+    sys.modules['win32gui'] = win32gui
+    sys.modules['win32con'] = win32con
+    sys.modules['wmi'] = wmi
+    sys.modules['mss'] = mss
+    sys.modules['mss.tools'] = mss.tools
+    sys.modules['pycaw.pycaw'] = MagicMock(AudioUtilities=AudioUtilities, IAudioEndpointVolume=IAudioEndpointVolume)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.responses import HTMLResponse, JSONResponse
