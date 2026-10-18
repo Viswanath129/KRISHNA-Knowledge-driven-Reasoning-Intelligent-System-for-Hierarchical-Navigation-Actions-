@@ -977,6 +977,13 @@
 <body>
     <div class="ambient"></div>
     
+    <!-- SOUND EFFECTS -->
+    <audio id="sfx-success" src="success.mp3" preload="auto"></audio>
+    <audio id="sfx-fail" src="fail.mp3" preload="auto"></audio>
+    <audio id="sfx-blocked" src="blocked.mp3" preload="auto"></audio>
+    <audio id="sfx-streak" src="streak.mp3" preload="auto"></audio>
+    <audio id="sfx-epic" src="epic.mp3" preload="auto"></audio>
+
     <!-- PERFORMANCE MONITOR -->
     <div class="perf-monitor" id="perf-monitor">
         <div><span class="perf-label">FPS:</span><span class="perf-value" id="fps">0</span></div>
@@ -1315,6 +1322,38 @@
             window._sseSource = src;
         }
         connectSSE();
+
+        // SSE — Reactions connection
+        function connectReactions() {
+            const rsrc = new EventSource("/api/reactions");
+            rsrc.addEventListener('reaction', (e) => {
+                try {
+                    const data = JSON.parse(e.data);
+                    const type = data.type;
+                    let audioId = null;
+                    if (type === 'FAILED') audioId = 'sfx-fail';
+                    else if (type === 'BLOCKED') audioId = 'sfx-blocked';
+                    else if (type === 'NORMAL') audioId = 'sfx-success';
+                    else if (['COMBO', 'ON_FIRE', 'UNSTOPPABLE'].includes(type)) audioId = 'sfx-streak';
+                    else if (['GODLIKE', 'LEGENDARY'].includes(type)) audioId = 'sfx-epic';
+
+                    if (audioId) {
+                        const audio = document.getElementById(audioId);
+                        if (audio) {
+                            audio.currentTime = 0;
+                            audio.play().catch(err => console.log('Audio play error:', err));
+                        }
+                    }
+                } catch(err) {
+                    console.error('Reaction parse error', err);
+                }
+            });
+            rsrc.onerror = () => {
+                rsrc.close();
+                setTimeout(connectReactions, 5000);
+            };
+        }
+        connectReactions();
 
         // Ethics polling — stored ID for turbo/pause control
         window.ethicsPollInterval = setInterval(async () => {
