@@ -5,17 +5,73 @@ import json
 import asyncio
 import subprocess
 import time
-import pyautogui
-import pygetwindow as gw
-import win32gui
-import win32con
+import sys
+from unittest.mock import MagicMock
+
+try:
+    import pyautogui
+except ImportError:
+    sys.modules['pyautogui'] = MagicMock()
+    import pyautogui
+
+try:
+    import pygetwindow as gw
+except ImportError:
+    sys.modules['pygetwindow'] = MagicMock()
+    import pygetwindow as gw
+
+try:
+    import win32gui
+except ImportError:
+    sys.modules['win32gui'] = MagicMock()
+    import win32gui
+
+try:
+    import win32con
+except ImportError:
+    sys.modules['win32con'] = MagicMock()
+    import win32con
+
+try:
+    import wmi
+except ImportError:
+    sys.modules['wmi'] = MagicMock()
+    import wmi
+
+try:
+    import speech_recognition as sr
+except ImportError:
+    sys.modules['speech_recognition'] = MagicMock()
+    import speech_recognition as sr
+
+try:
+    import win32com.client
+except ImportError:
+    sys.modules['win32com'] = MagicMock()
+    sys.modules['win32com.client'] = MagicMock()
+    import win32com.client
+
+try:
+    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+except ImportError:
+    sys.modules['pycaw'] = MagicMock()
+    sys.modules['pycaw.pycaw'] = MagicMock()
+    AudioUtilities = MagicMock()
+    IAudioEndpointVolume = MagicMock()
+
+try:
+    from ctypes import cast, POINTER
+except ImportError:
+    cast = MagicMock()
+    POINTER = MagicMock()
+
+try:
+    from comtypes import CLSCTX_ALL
+except ImportError:
+    sys.modules['comtypes'] = MagicMock()
+    from comtypes import CLSCTX_ALL
+
 import psutil
-import wmi
-import speech_recognition as sr
-import win32com.client
-from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 # Disable PyAutoGUI fail-safe to prevent termination when mouse hits screen corners
 pyautogui.FAILSAFE = False

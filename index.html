@@ -1468,6 +1468,33 @@
         console.log('  Ctrl+P = Pause/Resume Kernel');
         console.log('  Ctrl+T = Toggle Turbo Mode');
     </script>
+
+    <!-- Audio Elements for Reactions -->
+    <audio id="audio-normal" src="https://www.soundjay.com/buttons/sounds/button-1.mp3"></audio>
+    <audio id="audio-combo" src="https://www.soundjay.com/buttons/sounds/button-2.mp3"></audio>
+    <audio id="audio-on_fire" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
+    <audio id="audio-unstoppable" src="https://www.soundjay.com/buttons/sounds/button-4.mp3"></audio>
+    <audio id="audio-godlike" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+    <audio id="audio-legendary" src="https://www.soundjay.com/buttons/sounds/button-11.mp3"></audio>
+    <audio id="audio-failed" src="https://www.soundjay.com/misc/sounds/fail-buzzer-01.mp3"></audio>
+    <audio id="audio-blocked" src="https://www.soundjay.com/buttons/sounds/button-9.mp3"></audio>
+
+    <script>
+        const reactionSource = new EventSource('/api/reactions');
+        reactionSource.addEventListener('reaction', function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                const type = data.type ? data.type.toLowerCase() : '';
+                const audioElement = document.getElementById('audio-' + type);
+                if (audioElement) {
+                    audioElement.currentTime = 0;
+                    audioElement.play().catch(e => console.log('Audio play failed:', e));
+                }
+            } catch(e) {
+                console.error('Error parsing reaction data:', e);
+            }
+        });
+    </script>
 </body>
 
 </html>
